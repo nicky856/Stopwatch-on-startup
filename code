@@ -1,0 +1,60 @@
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define OLED_RESET     4
+Adafruit_SSD1306 display(OLED_RESET);
+
+int counter = 0;
+
+  int hours = 0;
+  int minTen = 0;
+  int minOne = 0;
+  int sec = 0;
+
+
+void setup() 
+{
+  Serial.begin(9600);
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+
+
+
+  display.clearDisplay();
+}
+
+void loop()
+{
+  display.setTextSize(2);
+  display.setTextColor(1);
+  display.setCursor(0,0);
+  display.print("Stopwatch:");
+  display.display(); 
+
+  display.setCursor(0, 0);
+      sec++;
+      if (sec > 59)
+        {
+          sec = 0;
+          minOne++;
+        }
+      if (minOne > 9)
+        {
+          minOne = 0;
+          minTen++;
+        }
+      if (minTen > 5)
+        {
+          minOne = 0;
+          minTen = 0;
+          hours++;
+        }
+
+      display.setCursor(0, 16); //change later
+      display.println((String)hours + ":" + minTen + minOne + ":" + sec);
+      display.display();
+      display.clearDisplay();
+      delay(315); //714 is somehow 1 second and not 1000
+}
